@@ -2,15 +2,19 @@ from tkinter import filedialog
 import tkinter as tk
 import yaheeFunctions as m
 import pandas as pd
+
 hauptFenster = tk.Tk()
 hauptFenster.geometry("800x500")
 hauptFenster.winfo_toplevel().title('YAHEE T1')
 instructionLabel = tk.Label(hauptFenster, text="Geben sie die Daten ein!")
 
+
 def changeDirectory():
-    #hauptFenster.directory = filedialog.askdirectory() # Instantly runs the filedialog
-    #print(type(hauptFenster.directory), hauptFenster.directory)
-    return
+    hauptFenster.directory = filedialog.askdirectory()  # Instantly runs the filedialog
+    print("gedrückt")
+    print(hauptFenster.directory)
+
+
 def deleteInput():
     Sdus.delete(0, 'end')
     Schiff.delete(0, 'end')
@@ -35,32 +39,33 @@ def createFile(Sdus, Schiff, BL, BLDATUM, rechnungsnr, rechnungsdatum, Container
     Incoterm1 = "FOB " + Incoterm.get()
     Transportpreis1 = Transportpreis.get() + " EUR"
     Inlandpreis1 = str(Inlandspreis) + " EUR"
-    writer = pd.ExcelWriter(hauptFenster.directory+'/'+Sendungsnr + ".xlsx", engine='xlsxwriter') #IMPORTANT!!!
+    writer = pd.ExcelWriter(hauptFenster.directory + '/' + Sendungsnr + ".xlsx", engine='xlsxwriter')  # IMPORTANT!!!
 
     T1, verzollung = m.createT1(Packliste)
     m.createWorkbook(T1, verzollung, Sendungsnr, Schiff1, BL1, BLDatum, Rechnungsnr, Rechnungsdatum, Containernr1,
                      Incoterm1, Transportpreis1, Inlandpreis1, writer)
     print('done')
-    print("Created: "+Sendungsnr+".xlsx")
+    print("Created: " + Sendungsnr + ".xlsx")
     deleteInput()
     return
 
-#per button auswahl
+
+# per button auswahl
 def open_file_dialog():
     global file_path
     file_path = filedialog.askopenfilename(initialdir='D://file')
     print("Ausgewählte Datei:", file_path)
 
-#per dnd auswahl
-#def drop(event):
-    #listb.insert("end",event.data)
+
+# per dnd auswahl
+# def drop(event):
+# listb.insert("end",event.data)
 
 
-#listb = tk.Listbox(hauptFenster, selectmode=tk.SINGLE)
-#listb.drop_target_register(dnd.DND_FILES)
-#listb.bind("<<Drop>>",drop)
-#listb.grid(row=11, column=1)
-
+# listb = tk.Listbox(hauptFenster, selectmode=tk.SINGLE)
+# listb.drop_target_register(dnd.DND_FILES)
+# listb.bind("<<Drop>>",drop)
+# listb.grid(row=11, column=1)
 
 
 Sdus = tk.Entry(hauptFenster)
@@ -108,8 +113,8 @@ SdusButton.grid(row=12, column=1)
 
 PacklistWahlButton = tk.Button(text='wähle Packliste',
                                command=lambda: open_file_dialog())
-SpeicherOrt = tk.Button(text='Wähle Zielordner', command= changeDirectory())
-SpeicherOrt.grid(row=13,column=1)
-hauptFenster.update()
+SpeicherOrt = tk.Button(text='Wähle Zielordner', command=lambda: changeDirectory())
+SpeicherOrt.grid(row=17, column=1)
 PacklistWahlButton.grid(row=10, column=1)
+hauptFenster.update()
 hauptFenster.mainloop()
