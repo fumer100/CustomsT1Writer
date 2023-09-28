@@ -141,8 +141,7 @@ def createWorkbook(T1, verzollung, Sendungsnr, Schiff, BL, BLDatum, Rechnungsnr,
 
     T1Sheet.write('A3', 'B/L Nummer:')
     T1Sheet.write('B3', BL)
-    BLDatum = datetime.datetime.strptime(BLDatum, '%d.%m.%Y')
-    T1Sheet.write_datetime('C3', BLDatum, date_format)
+    T1Sheet.write('C3', BLDatum, date_format)
 
     T1Sheet.write('A4', 'Rechnung:')
     T1Sheet.write('B4', Rechnungsnr)
@@ -169,7 +168,7 @@ def createWorkbook(T1, verzollung, Sendungsnr, Schiff, BL, BLDatum, Rechnungsnr,
 
     VerzollungsSheet.write('A3', 'B/L Nummer:')
     VerzollungsSheet.write('B3', BL)
-    VerzollungsSheet.write_datetime('C3', BLDatum, date_format)
+    VerzollungsSheet.write('C3', BLDatum)
 
     VerzollungsSheet.write('A4', 'Rechnung:')
     VerzollungsSheet.write('B4', Rechnungsnr)

@@ -17,11 +17,11 @@ def changeDirectory():
 
 def deleteInput():
     Sdus.delete(0, 'end')
-    Schiff.delete(0, 'end')
+    #Schiff.delete(0, 'end')
     BL.delete(0, 'end')
     BLDATUM.delete(0, 'end')
-    Incoterm.delete(0, 'end')
-    Transportpreis.delete(0, 'end')
+    #Incoterm.delete(0, 'end')
+    #Transportpreis.delete(0, 'end')
 
 
 def createFile(Sdus, Schiff, BL, BLDATUM,Incoterm, Transportpreis,
@@ -88,7 +88,10 @@ Transportpreis = tk.Entry(hauptFenster)
 Transportpreis.grid(row=8, column=1)
 tk.Label(hauptFenster, text='Transportpreis').grid(row=8)
 
-Inlandspreis = 795
+v = tk.IntVar(hauptFenster, value=750)
+Inlandspreis = tk.Entry(hauptFenster,textvariable= v)
+Inlandspreis.grid(row=9, column=1)
+tk.Label(hauptFenster, text='Inlandspreis').grid(row=9)
 
 SdusButton = tk.Button(text='Create',
                        command=lambda: createFile(Sdus, Schiff, BL, BLDATUM,
