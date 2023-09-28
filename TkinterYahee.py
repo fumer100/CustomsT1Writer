@@ -20,29 +20,23 @@ def deleteInput():
     Schiff.delete(0, 'end')
     BL.delete(0, 'end')
     BLDATUM.delete(0, 'end')
-    rechnungsnr.delete(0, 'end')
-    rechnungsdatum.delete(0, 'end')
-    Containernr.delete(0, 'end')
     Incoterm.delete(0, 'end')
     Transportpreis.delete(0, 'end')
 
 
-def createFile(Sdus, Schiff, BL, BLDATUM, rechnungsnr, rechnungsdatum, Containernr, Incoterm, Transportpreis,
+def createFile(Sdus, Schiff, BL, BLDATUM,Incoterm, Transportpreis,
                Inlandspreis, Packliste):
     Sendungsnr = Sdus.get()
     Schiff1 = Schiff.get()
     BL1 = BL.get()
     BLDatum = BLDATUM.get()
-    Rechnungsnr = rechnungsnr.get()
-    Rechnungsdatum = rechnungsdatum.get()
-    Containernr1 = Containernr.get()
     Incoterm1 = "FOB " + Incoterm.get()
     Transportpreis1 = Transportpreis.get() + " EUR"
     Inlandpreis1 = str(Inlandspreis) + " EUR"
     writer = pd.ExcelWriter(hauptFenster.directory + '/' + Sendungsnr + ".xlsx", engine='xlsxwriter')  # IMPORTANT!!!
 
-    T1, verzollung = m.createT1(Packliste)
-    m.createWorkbook(T1, verzollung, Sendungsnr, Schiff1, BL1, BLDatum, Rechnungsnr, Rechnungsdatum, Containernr1,
+    T1, verzollung, Rechnungsnr, Rechnungsdatum,Containernr = m.createT1(Packliste)# add rechnungsnummer Containernr. and rechnungsdatum as return
+    m.createWorkbook(T1, verzollung, Sendungsnr, Schiff1, BL1, BLDatum, Rechnungsnr, Rechnungsdatum, Containernr,
                      Incoterm1, Transportpreis1, Inlandpreis1, writer)
     print('done')
     print("Created: " + Sendungsnr + ".xlsx")
@@ -84,17 +78,7 @@ BLDATUM = tk.Entry(hauptFenster)
 BLDATUM.grid(row=3, column=1)
 tk.Label(hauptFenster, text='BLDatum').grid(row=3)
 
-rechnungsnr = tk.Entry(hauptFenster)
-rechnungsnr.grid(row=4, column=1)
-tk.Label(hauptFenster, text='Rechnungsnr.').grid(row=4)
 
-rechnungsdatum = tk.Entry(hauptFenster)
-rechnungsdatum.grid(row=5, column=1)
-tk.Label(hauptFenster, text='Rechnungsdatum').grid(row=5)
-
-Containernr = tk.Entry(hauptFenster)
-Containernr.grid(row=6, column=1)
-tk.Label(hauptFenster, text='Containernr.').grid(row=6)
 
 Incoterm = tk.Entry(hauptFenster)
 Incoterm.grid(row=7, column=1)
@@ -107,7 +91,7 @@ tk.Label(hauptFenster, text='Transportpreis').grid(row=8)
 Inlandspreis = 795
 
 SdusButton = tk.Button(text='Create',
-                       command=lambda: createFile(Sdus, Schiff, BL, BLDATUM, rechnungsnr, rechnungsdatum, Containernr,
+                       command=lambda: createFile(Sdus, Schiff, BL, BLDATUM,
                                                   Incoterm, Transportpreis, Inlandspreis, file_path))
 SdusButton.grid(row=12, column=1)
 
