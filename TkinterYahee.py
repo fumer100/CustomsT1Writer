@@ -17,14 +17,14 @@ def changeDirectory():
 
 def deleteInput():
     Sdus.delete(0, 'end')
-    #Schiff.delete(0, 'end')
+    # Schiff.delete(0, 'end')
     BL.delete(0, 'end')
     BLDATUM.delete(0, 'end')
-    #Incoterm.delete(0, 'end')
-    #Transportpreis.delete(0, 'end')
+    # Incoterm.delete(0, 'end')
+    # Transportpreis.delete(0, 'end')
 
 
-def createFile(Sdus, Schiff, BL, BLDATUM,Incoterm, Transportpreis,
+def createFile(Sdus, Schiff, BL, BLDATUM, Incoterm, Transportpreis,
                Inlandspreis, Packliste):
     Sendungsnr = Sdus.get()
     Schiff1 = Schiff.get()
@@ -32,10 +32,11 @@ def createFile(Sdus, Schiff, BL, BLDATUM,Incoterm, Transportpreis,
     BLDatum = BLDATUM.get()
     Incoterm1 = "FOB " + Incoterm.get()
     Transportpreis1 = Transportpreis.get() + " EUR"
-    Inlandpreis1 = str(Inlandspreis) + " EUR"
+    Inlandpreis1 = str(Inlandspreis.get()) + " EUR"
     writer = pd.ExcelWriter(hauptFenster.directory + '/' + Sendungsnr + ".xlsx", engine='xlsxwriter')  # IMPORTANT!!!
 
-    T1, verzollung, Rechnungsnr, Rechnungsdatum,Containernr = m.createT1(Packliste)# add rechnungsnummer Containernr. and rechnungsdatum as return
+    T1, verzollung, Rechnungsnr, Rechnungsdatum, Containernr = m.createT1(
+        Packliste)  # add rechnungsnummer Containernr. and rechnungsdatum as return
     m.createWorkbook(T1, verzollung, Sendungsnr, Schiff1, BL1, BLDatum, Rechnungsnr, Rechnungsdatum, Containernr,
                      Incoterm1, Transportpreis1, Inlandpreis1, writer)
     print('done')
@@ -78,8 +79,6 @@ BLDATUM = tk.Entry(hauptFenster)
 BLDATUM.grid(row=3, column=1)
 tk.Label(hauptFenster, text='BLDatum').grid(row=3)
 
-
-
 Incoterm = tk.Entry(hauptFenster)
 Incoterm.grid(row=7, column=1)
 tk.Label(hauptFenster, text='Incoterm').grid(row=7)
@@ -89,7 +88,7 @@ Transportpreis.grid(row=8, column=1)
 tk.Label(hauptFenster, text='Transportpreis').grid(row=8)
 
 v = tk.IntVar(hauptFenster, value=750)
-Inlandspreis = tk.Entry(hauptFenster,textvariable= v)
+Inlandspreis = tk.Entry(hauptFenster, textvariable=v)
 Inlandspreis.grid(row=9, column=1)
 tk.Label(hauptFenster, text='Inlandspreis').grid(row=9)
 
