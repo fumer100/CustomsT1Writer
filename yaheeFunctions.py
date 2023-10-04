@@ -21,8 +21,8 @@ def createT1(file):
     CustomsValue3 = civ[startIndexCiv:7 + civLen]['Unnamed: 6'].reset_index(drop=True)  # ready
     hsCode = civ[startIndexCiv:7 + civLen]['Unnamed: 9'].reset_index(drop=True)  # ready
     rechnungNr = civ.iloc[4]['Unnamed: 4']
-    rechnungsDatum=civ.iloc[5]['Unnamed: 4']
-    containerNr=civ.iloc[5]['Unnamed: 1']
+    rechnungsDatum = civ.iloc[5]['Unnamed: 4']
+    containerNr = civ.iloc[5]['Unnamed: 1']
 
     # Erstellung der Tabelle
 
@@ -57,19 +57,22 @@ def remove_duplicates(input):
     s = " ".join(UniqW.keys())
     return s
 
+
 def writeToExcel(writer, verzollung, T1, Codes):  # DONT TOUCH
     verzollung.to_excel(writer, sheet_name='verzollung', startrow=9, startcol=0, index=False)
     T1.to_excel(writer, sheet_name='T1', startrow=9, startcol=0, index=False)
-    Codes.to_excel(writer, sheet_name='Codes', startrow=0, startcol=0, index=False)
+    Codes.to_excel(writer, sheet_name='codes', startrow=0, startcol=0, index=False)
 
     return
+
 
 def createVerzollung(T1):  # DONT TOUCH #FINAL
     join_unique = lambda x: ','.join(set(x))
     leadingSpaces = lambda x: x.lstrip()
     unique = lambda x: remove_duplicates(x)
 
-    warenbesch1 = T1.groupby('H.S code').agg({'Warenbeschreibung': join_unique})  # erzeugt Warenbeschreibung für jede HS
+    warenbesch1 = T1.groupby('H.S code').agg(
+        {'Warenbeschreibung': join_unique})  # erzeugt Warenbeschreibung für jede HS
     warenbesch1 = warenbesch1.agg({'Warenbeschreibung': leadingSpaces})
     warenbesch1 = warenbesch1.agg({'Warenbeschreibung': unique})
 
@@ -105,8 +108,8 @@ def addSums(table):  # dont Touch
 
 
 def addYcodes(table):
-    table['Besonderheit'] = ["=SVERWEIS(B" + str(i) + "&C" + str(
-        i) + ";'https://clasquinsa.sharepoint.com/sites/CLQ-DUS/Shared Documents/General/DUS/Seefracht/Import Kunden/Yahee/Austarifierung/SDUS012030.xlsx'#$Codes.A$1:C$1048576;3;0)"
+    table['Besonderheit'] = ["=vlookup(B" + str(i) + "&C" + str(
+        i) + ", codes!A1:C95 , 3, 0)"
                              for i in range(11, 11 + len(table))]
 
     return table
@@ -121,11 +124,11 @@ def getLengthOfColumns(packList, civ):  # DONT TOUCH #FINAL
 def createWorkbook(T1, verzollung, Sendungsnr, Schiff, BL, BLDatum, Rechnungsnr, RechnungsDatum, Containernr, Incoterm,
                    Transportpreis, Inlandpreis, writer):
     with pd.ExcelFile("Y-Docs.xls") as xls:
-        codes = pd.read_excel(xls, 'Codes')
+        codes = pd.read_excel(xls, 'codes')
     writeToExcel(writer, verzollung, T1, codes)
     print('verzollung', verzollung)
 
-    workbook =  writer.book
+    workbook = writer.book
     date_format = workbook.add_format({'num_format': 'dd.mm.yy'})
 
     T1Sheet = writer.sheets['T1']
